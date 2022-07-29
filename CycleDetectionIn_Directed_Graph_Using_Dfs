@@ -1,0 +1,51 @@
+#include<bits/stdc++.h>
+#define ll long long 
+#define nl "\n"
+using namespace std ;
+
+// Check is there any cycle in directed graph or not ....!
+
+bool Cycle_Detect_In_Directed_Graph_Using_Dfs(vector<vector<ll>>&graph ,  vector<ll>&visited , vector<ll>&dfsVisited , ll root){
+       
+       visited[root] = 1 ;        // Mark as true both in visited and dfsvisited vector
+       dfsVisited[root] = 1 ;
+       
+       for(ll &child : graph[root]){  // Enter the child arena
+         if(!visited[child]){
+           if(Cycle_Detect_In_Directed_Graph_Using_Dfs(graph ,visited , dfsVisited , child)) return true ;   // Dfs call for child node ...
+         }
+         else {
+           if(dfsVisited[child] && visited[child])return true ;
+         }
+       }
+       
+      dfsVisited[root] = 0 ;    // Mark unvisited when you return ..!
+   
+    return false ;
+}
+
+int main() {
+    ll node , edge ; cin >> node >> edge ;
+    
+    vector<vector<ll>>graph(node + 1 , vector<ll>() ) ; bool ch = false ;
+    
+    for(ll i = 1 ; i <= edge ; i ++){     // Taking inputs graph 
+      ll u , v ; cin >> u >> v ;
+      graph[u].push_back(v) ;
+    }
+    
+    vector<ll>visited(node + 1 , 0 ) , dfsvisited(node + 1 , 0) ;
+    for(ll i = 1 ; i <= node ; i ++){                 //  calling dfs for all nodes if nodes are start from 1 to node
+        if(!visited[i]){
+          ch |= Cycle_Detect_In_Directed_Graph_Using_Dfs(graph , visited ,dfsvisited, i ) ;
+        }
+        
+        if(ch)break ;
+    }
+  
+  // Final result ...!
+  if(ch)cout << "There exist a cycle in the graph..!" << nl ;
+  else cout << "There doesn't exist a cycle in the graph...!" << nl ;
+    
+    return 0 ;
+}
