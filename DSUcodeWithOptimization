@@ -1,0 +1,57 @@
+#include<bits/stdc++.h>
+#define ll long long 
+#define nl "\n"
+using namespace std ;
+const int N = 1e5 + 10 ;
+
+int parent[N] ;
+int capacity[N] ;
+
+void make(int v){
+  parent[v] = v ;
+  capacity[v] = 1 ;
+}
+
+int find(int v){
+  if(v == parent[v]) return v ;
+  return parent[v] = find(parent[v]) ;  // Path compression optimization 
+}
+
+
+// You can do union by rank aswell 
+// Here i'm doing union by size ..
+
+void Union(int a , int b){ // making a  as your parent of b ..!
+  a = find(a) ; // left tree
+  b = find(b) ; // right tree
+  
+  if(a != b){
+    if(capacity[a] < capacity[b])swap(a , b) ;
+      parent[b] = a ;
+      capacity[a] += capacity[b] ;  // I don't think ki after this size of b matters 
+  }
+                            
+}
+
+int main() {
+    
+    int n , k ; cin >> n >> k ;
+    for(int i = 1 ; i <= n ; i++)make(i) ;
+    
+    int u , v ;
+    
+    while(k--){
+       cin >> u >> v ;
+       Union(u , v) ;
+    }
+
+    int connected_ct = 0 ;
+    for(int i = 1 ; i <= n ; i++){       // finding no of connected component
+      if(parent[i] == i)connected_ct ++ ;
+      
+    }
+    
+    cout << connected_ct << nl ;
+    
+    return 0 ;
+}
