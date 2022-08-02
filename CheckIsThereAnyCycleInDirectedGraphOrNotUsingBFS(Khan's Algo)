@@ -1,0 +1,52 @@
+#include<bits/stdc++.h>
+#define ll long long 
+#define nl "\n"
+using namespace std ;
+const int N = 1e5 + 10 ;
+bool DetectCycleUsingBFS(vector<vector<int>>&graph , vector<int>&indegree , queue<int>&zeroIndegree , vector<int>&orderOfToposort , int count , int node ){
+      while(!zeroIndegree.empty()){
+         count ++ ;
+         int node = zeroIndegree.front() ; orderOfToposort.push_back(node) ; zeroIndegree.pop() ;
+        
+         for(int child : graph[node]){
+            indegree[child]-- ;
+            if(indegree[child] == 0)zeroIndegree.push(child) ;
+         }
+      }
+     
+      return count == node ;
+}
+int main() {
+    
+    int node , edge ; cin >> node >> edge ; // Taking 1 based node value 
+    
+    vector<vector<int>>graph(node+1 , vector<int>()) ; // Directed acyclic graph ...!
+    vector<int>indegree(node + 1 , 0) ;
+    vector<int>orderOfToposort ;
+    queue<int>zeroIndegree ;
+    
+    for(int i = 1 ; i <= edge ; i++){
+      int u , v ; cin >> u >> v ;
+      graph[u].push_back(v) ;  // Directed edges 
+    }
+    
+    for(int i = 1 ; i <= node ; i++){
+      for(int &child:graph[i]){
+        indegree[child] ++ ;
+      }
+    }
+    
+    for(int i = 1 ; i <= node ; i++){
+        if(indegree[i]== 0)zeroIndegree.push(i) ;
+    }
+    
+    int count = 0 ;
+    bool ch = DetectCycleUsingBFS(graph , indegree ,zeroIndegree , orderOfToposort , count , node) ;
+    
+    if(ch)cout <<"Cycle doesn't exist..!" << nl ;
+    else cout << "Cycle exist..!" << nl ;
+    
+
+    
+    return 0 ;
+}
