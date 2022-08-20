@@ -1,0 +1,40 @@
+Source cp algorithm  -:
+ // Bellman-ford algorithm 
+ 
+struct edge
+{
+    int a, b, cost;
+};
+
+int n, m, v;
+vector<edge> e;
+const int INF = 1000000000;
+
+void solve()
+{
+    vector<int> d (n, INF);
+    d[v] = 0;
+    for (int i=0; i<n-1; ++i)
+        for (int j=0; j<m; ++j)
+            if (d[e[j].a] < INF)
+                d[e[j].b] = min (d[e[j].b], d[e[j].a] + e[j].cost);
+    // display d, for example, on the screen
+}
+
+
+// solve that cses problemset question with the methode which mention in utube video 
+
+my methode -: I use BF algo to find shortest path from one source node to all other nodes in negetive edged graph but there shouldn't be presence of negetive cycle 
+To detect negetive cycle again run BF algo once after running it n-1 times and see if any changes in dis vector occure then there exist negetive cycle 
+otherwise u check if the dis[node] != infinity then print that value else -1 
+
+If it is for single source to single destination then question become little bit tricky what to do in that case ??
+SOLUTION : 
+If negetive cycle doesn't exist then ur ans is curr ans (means running that BF algo n-1 times )
+If negetive cycle exist there are two possibilities a. Negetive cycle affect destination node distance 
+                                                    b. Negetive cycle doesn't affect destination node distance 
+                                                    
+In these case just assign very very very min value to node which involve in cycle (after n time run of BF algo ) 
+and run this algo again for n-1 times and check does our destination node affect means contain very large negetive value then ans is -1 else print the ans :)
+
+
