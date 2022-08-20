@@ -40,5 +40,7 @@ and run this algo again for n-1 times and check does our destination node affect
 It is prefer to use dfs(its ur choice) for finding which node comes in path of source and destination .. or checking the value taking in ur min path vlue acc.to ur ans and u give 
 the min vlaue after detecting neg cycle ..
 
+For detection of cycle in directed graph we need two visited array and this thing is different from ( targeting to reach destination node from source node and for this 
+we only need one visited array for not to iterate over again again in same loop) 
 
 Bhai plz solve above mention question once ..
