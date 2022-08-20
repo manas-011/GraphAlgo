@@ -37,4 +37,4 @@ If negetive cycle exist there are two possibilities a. Negetive cycle affect des
 In these case just assign very very very min value to node which involve in cycle (after n time run of BF algo ) 
 and run this algo again for n-1 times and check does our destination node affect means contain very large negetive value then ans is -1 else print the ans :)
 
-
+Bhai plz solve above mention question once ..
