@@ -43,4 +43,6 @@ the min vlaue after detecting neg cycle ..
 For detection of cycle in directed graph we need two visited array and this thing is different from ( targeting to reach destination node from source node and for this 
 we only need one visited array for not to iterate over again again in same loop) 
 
+DFS is not efficient for finding shortest path ..
+
 Bhai plz solve above mention question once ..
