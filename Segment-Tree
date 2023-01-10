@@ -1,0 +1,124 @@
+#include<bits/stdc++.h>
+#define ll long long int 
+#define pb push_back
+#define inf 1e15
+#define nl "\n"
+using namespace std ;
+ 
+void buildTree(ll start , ll end , ll treeindex , vector<ll>&tree , vector<ll>&parentnodes){
+   // Base cases 
+     if(start > end)return ;
+     if(start == end){
+       tree[treeindex] = parentnodes[start] ;
+       return ;
+     }
+     
+     // finding mid value 
+     ll mid = start + (end - start)/2 ;
+     
+     // Now its time to call left and right child 
+     
+     buildTree(start , mid , 2*treeindex , tree , parentnodes ) ;
+     
+     buildTree(mid + 1 , end , 2*treeindex + 1 , tree , parentnodes ) ;
+     
+     // Now its time to doing your required stuffs (like min , max , gcd , xor....!)
+     
+     ll left  = tree[2*treeindex] ;
+     ll right = tree[2*treeindex + 1] ;
+     
+     tree[treeindex] = left + right ;
+     
+     return ;
+}
+ 
+ 
+ll queryValue(ll qs , ll qe , vector<ll>&tree , ll start , ll end , ll treeindex){
+  
+   if(qs > end || qe < start)return 0 ;
+   
+   else if(qs <= start && qe >= end)return tree[treeindex] ; // complete overlap case ......
+   
+   ll mid = start + (end - start)/2 ; // else we divide .......
+   
+   ll leftAns  = queryValue(qs , qe , tree , start , mid , treeindex * 2) ;
+   
+   ll rightAns = queryValue(qs , qe , tree , mid + 1 , end , treeindex * 2 + 1) ;
+   
+   return leftAns + rightAns ;
+}
+ 
+ 
+void NodeUpdateSegTree(vector<ll>&tree , ll start , ll end , ll treeindex , ll updateIndex , ll value ){
+     
+    if((start > updateIndex) || (end < updateIndex)){
+      return ;
+    }
+     
+    else if(start == end){
+      tree[treeindex] = value ;
+      return ;
+    }
+     
+    long long  mid = start + (end - start)/2 ;
+     
+    NodeUpdateSegTree(tree , start , mid , 2 * treeindex , updateIndex , value ) ;
+     
+    NodeUpdateSegTree(tree , mid + 1 , end , 2 * treeindex + 1 , updateIndex , value ) ;
+     
+    long long  leftVal  = tree[2 * treeindex] ;
+    long long  rightVal = tree[2 * treeindex + 1] ;
+     
+    tree[treeindex] = leftVal + rightVal ;
+     
+    return ;
+}
+ 
+// void RangeUpdate(vector<ll>&tree , ll start , ll end , ll treeindex , ll us , ll ue , ll value){
+//     if(start > ue || end < us)return ;
+     
+//     if(start == end){
+//       tree[treeindex] += value ;
+//       return ;
+//     }
+     
+//     ll mid = start + (end - start)/2 ;
+     
+//     RangeUpdate(tree , start , mid , 2*treeindex , ll us , ll ue , ll value ) ;
+     
+//     RangeUpdate(tree , mid + 1 , end , 2*treeindex + 1 , ll us , ll ue , ll value ) ;
+     
+//     tree[treeindex] = min(tree[treeindex * 2] , tree[treeindex * 2 + 1]) ;
+     
+//     return ;
+     
+// }
+ 
+ 
+ 
+int main(){
+    ll n , q ; cin >> n >> q ;
+    
+    vector<ll>vect(n) ; for(int i = 0 ; i < n ; i++)cin >> vect[i] ;
+    
+    vector<ll>tree(4 * n) ;
+    
+    // In this case if we query then we have to pass 0-based indexing 
+    // And we store the value in tree (1-based indexing) .........
+
+    buildTree(0 , n-1 , 1 , tree , vect) ;
+    
+    while(q--){
+      ll a , b , c ; cin >> a >> b >> c ;
+
+      if(a == 1){
+        NodeUpdateSegTree(tree , 0 , n-1 , 1 , b - 1 , c ) ;
+      }
+      else {
+        cout << queryValue(b - 1 , c - 1 , tree , 0 , n-1 , 1) << nl ;
+      }
+      
+    }
+   
+    return 0 ;
+}
