@@ -1,0 +1,21 @@
+ void make(int node , vector<int>&parent , vector<int>&capacity){
+  parent[node] = node ;
+  capacity[node] = 1 ;
+}
+
+int find(int node , vector<int>&parent , vector<int>&capacity){
+  if(node == parent[node]) return node ;
+  return parent[node] = find(parent[node] , parent , capacity) ;  // Path compression optimization 
+}
+
+void Union(int a , int b , vector<int>&parent , vector<int>&capacity){ // making a  as your parent of b ..!
+  a = find(a , parent , capacity) ; // left tree
+  b = find(b , parent , capacity) ; // right tree
+  
+  if(a != b){
+    if(capacity[a] < capacity[b])swap(a , b) ;
+      parent[b] = a ;
+      capacity[a] += capacity[b] ;  // I don't think ki after this size of b matters 
+  }
+                            
+}
