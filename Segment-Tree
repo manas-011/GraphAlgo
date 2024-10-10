@@ -57,6 +57,33 @@ public:
     }
 };
 
+// Just an example of how to use.. 
+Question -: https://leetcode.com/problems/maximum-width-ramp/description/?envType=daily-question&envId=2024-10-10
+
+class Solution {
+public:
+    int maxWidthRamp(vector<int>& nums) {
+
+        int n = nums.size(); 
+        int maxi = *max_element(nums.begin(), nums.end()) ;
+        vector<int>arr(maxi + 1, 1e6) ;
+
+        SegmentTree seg(arr) ;
+        maxi = 0 ;
+        for(int i = 0 ; i < n ; i++){
+            int idx = seg.minInRange(0, nums[i]) ;
+            maxi = max(maxi, i - idx) ;
+            if(arr[nums[i]] == 1e6){
+                arr[nums[i]] = i ;
+                seg.updateValue(nums[i], i) ;
+            }
+        }
+
+        return maxi ;
+
+    }
+};
+
 
 // Certain things you should care about while implementing seg-tree
 1. Check all return statement (it varies type to type like max-segTree, min-segTree)
