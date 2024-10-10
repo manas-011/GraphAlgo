@@ -30,7 +30,7 @@ private:
 
     int query(int node, int start, int end, int l, int r) {
         if (r < start || end < l) {
-            return 1e6;
+            return INT_MAX;
         }
         if (l <= start && end <= r) {
             return tree[node];
@@ -56,3 +56,8 @@ public:
         return query(1, 0, n - 1, l, r);
     }
 };
+
+
+// Certain things you should care about while implementing seg-tree
+1. Check all return statement (it varies type to type like max-segTree, min-segTree)
+2. Also check return statement in query function.
