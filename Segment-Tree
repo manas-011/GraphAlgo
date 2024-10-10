@@ -3,34 +3,34 @@ private:
     vector<int> tree;
     int n;
 
-    void build(const vector<int>& nums, int node, int start, int end, const vector<int>& peakMarkers) {
+    void build( int node, int start, int end, vector<int>& elements) {
         if (start == end) { 
-            tree[node] = peakMarkers[start];
+            tree[node] = elements[start];
         } else {
             int mid = (start + end) / 2;
-            build(nums, 2 * node, start, mid, peakMarkers);
-            build(nums, 2 * node + 1, mid + 1, end, peakMarkers);
-            tree[node] = tree[2 * node] + tree[2 * node + 1];
+            build(2 * node, start, mid, elements);
+            build(2 * node + 1, mid + 1, end, elements);
+            tree[node] = min(tree[2 * node], tree[2 * node + 1]);
         }
     }
 
-    void update(int node, int start, int end, int idx, int newValue, const vector<int>& peakMarkers) {
+    void update(int node, int start, int end, int idx, int newValue) {
         if (idx < start || idx > end) { 
             return;
         }
         if (start == end) { 
-            tree[node] = peakMarkers[start];
+            tree[node] = newValue;
         } else {
             int mid = (start + end) / 2;
-            update(2 * node, start, mid, idx, newValue, peakMarkers);
-            update(2 * node + 1, mid + 1, end, idx, newValue, peakMarkers);
-            tree[node] = tree[2 * node] + tree[2 * node + 1];
+            update(2 * node, start, mid, idx, newValue);
+            update(2 * node + 1, mid + 1, end, idx, newValue);
+            tree[node] = min(tree[2 * node], tree[2 * node + 1]);
         }
     }
 
     int query(int node, int start, int end, int l, int r) {
         if (r < start || end < l) {
-            return 0;
+            return 1e6;
         }
         if (l <= start && end <= r) {
             return tree[node];
@@ -38,22 +38,21 @@ private:
         int mid = (start + end) / 2;
         int leftQuery = query(2 * node, start, mid, l, r);
         int rightQuery = query(2 * node + 1, mid + 1, end, l, r);
-        return leftQuery + rightQuery;
+        return min(leftQuery, rightQuery);
     }
 
 public:
-    SegmentTree(const vector<int>& nums, const vector<int>& peakMarkers) {
-        n = nums.size();
+    SegmentTree(vector<int>& elements) {
+        n = elements.size();
         tree.resize(4 * n);
-        build(nums, 1, 0, n - 1, peakMarkers);  
+        build(1, 0, n - 1, elements);  
     }
 
-    void updateValue(int idx, int newValue, const vector<int>& peakMarkers) {
-        update(1, 0, n - 1, idx, newValue, peakMarkers);
+    void updateValue(int idx, int newValue) {
+        update(1, 0, n - 1, idx, newValue);
     }
 
-    int sumInRange(int l, int r) {
+    int minInRange(int l, int r) {
         return query(1, 0, n - 1, l, r);
     }
-
 };
